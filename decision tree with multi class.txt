@@ -1,0 +1,46 @@
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+from sklearn import tree
+
+# Create a small synthetic dataset
+data = {
+    'Feature 1': [1, 2, 1.5, 3, 5, 4, 3.5, 4.5, 2.5, 5.5],
+    'Feature 2': [1, 1, 2, 1, 3, 2, 3.5, 2.5, 3, 4],
+    'Class': [0, 0, 0, 1, 1, 1, 2, 2, 2, 2]  # Three classes: 0, 1, and 2
+}
+
+# Convert to DataFrame
+df = pd.DataFrame(data)
+
+# Split features and target variable
+X = df[['Feature 1', 'Feature 2']]
+y = df['Class']
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Create a Decision Tree Classifier
+clf = DecisionTreeClassifier(random_state=42)
+
+# Fit the classifier to the training data
+clf.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = clf.predict(X_test)
+
+# Evaluate the model
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+# Visualize the decision tree
+plt.figure(figsize=(12, 8))
+tree.plot_tree(clf, filled=True, feature_names=X.columns, class_names=[f'Class {i}' for i in range(3)])
+plt.title("Decision Tree Visualization")
+plt.show()
